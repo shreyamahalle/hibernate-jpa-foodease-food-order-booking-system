@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CartItemService {
 
-    boolean addCartItem(CartItem cartItem) throws SQLException;
+    Object addCartItem(CartItem cartItem) throws SQLException;
 
     boolean deleteCartItem(int id);
 

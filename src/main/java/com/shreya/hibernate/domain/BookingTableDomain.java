@@ -1,7 +1,11 @@
 package com.shreya.hibernate.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Entity(name = "BOOKINGTABLE")
-public class BookingTable {
+public class BookingTableDomain {
 
     @Id
     @ToString.Exclude

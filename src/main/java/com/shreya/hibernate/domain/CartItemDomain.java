@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "CARTITEM")
-public class CartItem {
+public class CartItemDomain {
 
     @Id
     @ToString.Exclude

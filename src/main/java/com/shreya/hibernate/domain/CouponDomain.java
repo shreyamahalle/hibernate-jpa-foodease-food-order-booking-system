@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "COUPON")
-public class Coupon {
+public class CouponDomain {
     @Id
     @ToString.Exclude
     @GeneratedValue(strategy = GenerationType.IDENTITY)

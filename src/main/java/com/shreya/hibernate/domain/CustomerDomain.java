@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "CUSTOMER")  // explicit table name for clarity
-public class Customer {
+public class CustomerDomain {
     @Id
     @ToString.Exclude
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -25,7 +25,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public boolean addFeedback(Feedback feedback) throws SQLException {
         log.info("Saving feedback: {}", feedback);
-        boolean result = feedbackRepository.addFeedback(feedback);
+        boolean result = feedbackRepository.save(feedback);
         if (!result) {
             throw new FeedbackCreationException("Unable to add feedback.");
         }

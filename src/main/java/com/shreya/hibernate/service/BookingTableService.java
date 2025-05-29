@@ -4,16 +4,17 @@ import com.shreya.hibernate.model.BookingTable;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface BookingTableService {
 
-    void addBooking(BookingTable bookingTable) throws SQLException;
+    BookingTable addBooking(BookingTable bookingTable) throws SQLException;
 
     List<BookingTable> getAllBookings();
 
     BookingTable getBookingById(Long id);
 
-    boolean deleteBooking(Long id);
+    Optional<BookingTable> deleteBooking(Long id);
 
     boolean updateBooking(long id, BookingTable bookingTable);
 }

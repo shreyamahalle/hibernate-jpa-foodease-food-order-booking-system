@@ -33,5 +33,5 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    private CustomerDomain customer;
 }
