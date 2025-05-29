@@ -1,13 +1,8 @@
 package com.shreya.hibernate.repository;
 
-import com.shreya.hibernate.model.Payment;
+import com.shreya.hibernate.domain.Payment;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface PaymentRepository extends JpaRepository<Payment,Integer> {
 
-public interface PaymentRepository {
-    boolean addPayment(Payment payment);
-    List<Payment> findAll();
-    Payment findById(int id);
-    boolean update(Payment payment);
-    boolean delete(int id);
 }

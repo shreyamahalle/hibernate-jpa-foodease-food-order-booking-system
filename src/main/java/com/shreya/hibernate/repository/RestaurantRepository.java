@@ -1,13 +1,8 @@
 package com.shreya.hibernate.repository;
 
-import com.shreya.hibernate.model.Restaurant;
+import com.shreya.hibernate.domain.Restaurant;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface RestaurantRepository extends JpaRepository<Restaurant,Integer> {
 
-public interface RestaurantRepository {
-    void addRestaurant(Restaurant restaurant);
-    List<Restaurant> retrieveRestaurants();
-    Restaurant retrieveRestaurant(int id);
-    boolean deleteRestaurant(int id);
-    boolean updateRestaurant(int restaurant);
 }

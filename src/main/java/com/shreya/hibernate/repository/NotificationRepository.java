@@ -1,12 +1,9 @@
 package com.shreya.hibernate.repository;
 
-import com.shreya.hibernate.model.Notification;
 
-import java.util.List;
+import com.shreya.hibernate.domain.Notification;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NotificationRepository {
-    boolean saveNotification(Notification notification);
-    List<Notification> getAllNotifications();
-    List<Notification> getNotificationsByCustomerId(Long customerId);
-    boolean markAsRead(Long id);
+public interface NotificationRepository extends JpaRepository<Notification,Integer> {
+
 }

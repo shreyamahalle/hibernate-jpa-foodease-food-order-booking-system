@@ -1,12 +1,8 @@
 package com.shreya.hibernate.repository;
 
-import com.shreya.hibernate.model.OrderStatus;
-import java.util.List;
+import com.shreya.hibernate.domain.OrderStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderStatusRepository {
-    boolean addOrderStatus(OrderStatus orderStatus);
-    List<OrderStatus> retrieveOrderStatuses();
-    OrderStatus retrieveOrderStatus(long id);
-    boolean updateOrderStatus(OrderStatus orderStatus);
-    boolean deleteOrderStatus(long id);
+public interface OrderStatusRepository extends JpaRepository<OrderStatus,Integer> {
+
 }

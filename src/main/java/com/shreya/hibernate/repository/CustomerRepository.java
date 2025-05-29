@@ -1,16 +1,9 @@
 package com.shreya.hibernate.repository;
 
-import com.shreya.hibernate.model.Customer;
+import com.shreya.hibernate.domain.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
+public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 
-public interface CustomerRepository{
 
-    void addCustomer(Customer customer);
-    List<Customer> retrieveCustomers();
-    Optional<Customer> findById(int id);
-    boolean deleteCustomer(int id);
-    boolean updateCustomer(Customer customer);
-    boolean updatePartialCustomer(Customer customer);
 }

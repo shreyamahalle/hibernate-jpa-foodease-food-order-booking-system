@@ -1,19 +1,9 @@
 package com.shreya.hibernate.repository;
 
-import com.shreya.hibernate.model.Review;
+import com.shreya.hibernate.domain.Review;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface ReviewRepository extends JpaRepository<Review,Integer> {
 
-public interface ReviewRepository {
-
-    boolean addReview(Review review);
-
-    List<Review> retrieveReviews();
-
-    Review findById(long id);
-
-    boolean deleteReview(long id);
-
-    boolean updateReview(Review review);
 
 }

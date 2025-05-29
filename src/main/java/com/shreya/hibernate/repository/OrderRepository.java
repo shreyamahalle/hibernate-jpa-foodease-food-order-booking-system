@@ -1,12 +1,8 @@
 package com.shreya.hibernate.repository;
 
-import com.shreya.hibernate.model.Order;
-import java.util.List;
+import com.shreya.hibernate.domain.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderRepository {
-    boolean addOrder(Order order);
-    List<Order> retrieveOrders();
-    Order retrieveOrder(int id, String type);
-    boolean deleteOrder(int id);
-    boolean updateOrder(int id, String newType);
+public interface OrderRepository extends JpaRepository<Order,Integer> {
+
 }

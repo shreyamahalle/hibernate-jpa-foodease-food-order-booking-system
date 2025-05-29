@@ -4,6 +4,6 @@ import com.shreya.hibernate.domain.BookingTable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface BookingTableRepository extends JpaRepository<BookingTable, Integer> {
+public interface BookingTableRepository extends JpaRepository<BookingTable, Long> {
 
 }

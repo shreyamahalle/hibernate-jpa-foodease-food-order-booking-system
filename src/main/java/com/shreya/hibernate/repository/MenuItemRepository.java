@@ -1,13 +1,9 @@
 package com.shreya.hibernate.repository;
 
-import com.shreya.hibernate.model.MenuItem;
 
-import java.util.List;
+import com.shreya.hibernate.domain.MenuItem;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MenuItemRepository {
-    boolean addMenuItem(MenuItem menuItem);
-    List<MenuItem> retrieveMenuItems();
-    MenuItem findById(long id);
-    boolean deleteMenuItem(long id);
-    boolean updateMenuItem(MenuItem menuItem);
+public interface MenuItemRepository extends JpaRepository<MenuItem,Integer> {
+
 }

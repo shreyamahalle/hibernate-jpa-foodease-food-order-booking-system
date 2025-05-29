@@ -1,18 +1,9 @@
 package com.shreya.hibernate.repository;
 
-import com.shreya.hibernate.model.DeliveryAgent;
+import com.shreya.hibernate.domain.DeliveryAgent;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface DeliveryAgentRepository extends JpaRepository<DeliveryAgent,Integer> {
 
-public interface DeliveryAgentRepository {
 
-    boolean addDeliveryAgent(DeliveryAgent deliveryAgent);
-
-    List<DeliveryAgent> retrieveDeliveryAgents();
-
-    DeliveryAgent findById(int id);
-
-    boolean deleteDeliveryAgent(int id);
-
-    boolean updateDeliveryAgent(DeliveryAgent deliveryAgent);
 }
