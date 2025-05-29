@@ -132,9 +132,18 @@ graph LR
 -  Postman Ready: Full suite of sample requests
 
 ---
-##  Hibernate ORM Integration(Plain Hibernate - Not JPA)
+## Hibernate ORM Integration with JPA (Using Spring Data JPA)
 
-This project uses **Hibernate** via **Spring Data JPA** for mapping Java objects to relational tables.
+This project uses **Hibernate ORM** as the JPA implementation via **Spring Data JPA** for mapping Java entities to relational database tables. It leverages the Java Persistence API (JPA) specification to perform CRUD and complex data operations in an object-relational manner, while Hibernate handles the underlying ORM functionality.
+
+Key points:
+- Entities are annotated with standard JPA annotations (`@Entity`, `@Table`, etc.)
+- Spring Data JPA repositories provide easy CRUD and query methods
+- Hibernate acts as the JPA provider handling SQL generation and caching
+- Transactions are managed via Spring's `@Transactional`
+- Supports JPQL, Criteria API, native queries, and entity relationships
+
+This integration abstracts the boilerplate ORM setup and focuses on JPA standards for portability and maintainability, with Hibernate as the powerful backend ORM engine.
 
 ###  Benefits of Using Hibernate:
 
@@ -160,7 +169,11 @@ This project is built with the following technologies:
 | Lombok            | Boilerplate reduction                    |
 | HTML5/CSS3        | Frontend structure                       |
 | Git               | Version control                          |
-| Postman           | API Testing                              |
+| Postman           | API Testing                              | 
+| Hibernate         | ORM mapping                              |
+| Spring Data JPA   | Database operations                      |  
+
+
 ---
 
 ## Getting Started
@@ -822,19 +835,17 @@ class OrderRepository {
 
 
 ## Best Practices Followed
-- MVC Layering: Each layer has a single responsibility and adheres to open/closed principle.
-- Exception Handling: Extendable @ControllerAdvice class can be added for custom error management.
-- Validation: javax.validation annotations (future improvement) to enforce domain constraints.
-- DTO Mapping: DTOs can be introduced for request/response abstraction (optional enhancement).
-- Lombok: Reduces boilerplate while maintaining readability.
+- Use DTOs for API communication
+- Leverage Spring Data JPA repository interfaces
+- Implement proper transaction management
+- Use entity lifecycle callbacks (@PrePersist, @PostLoad)
+- Optimize queries with @EntityGraph
 
 ## Future Scope
-- Add unit tests using JUnit + Mockito
-- API authentication using Spring Security or JWT
-- Integration with Kafka or RabbitMQ for event-driven order tracking
-- CI/CD with GitHub Actions
-- Dockerization and deployment to Kubernetes or AWS ECS
-
+- Add Spring Data REST for hypermedia
+- Implement JPA auditing (@CreatedDate, @LastModifiedDate)
+- Add querydsl for type-safe queries
+- Implement JPA second-level cache
 ---
 
 
