@@ -1,8 +1,9 @@
 package com.shreya.hibernate.repository;
-
-import com.shreya.hibernate.domain.Order;
+import com.shreya.hibernate.domain.OrderDomain;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderRepository extends JpaRepository<Order,Integer> {
+import java.util.Optional;
 
+public interface OrderRepository extends JpaRepository<OrderDomain,Integer> {
+    Optional<OrderDomain> findByIdAndType(Long id, String type);
 }

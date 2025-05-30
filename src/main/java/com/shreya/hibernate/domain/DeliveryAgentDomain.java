@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "DELIVERYAGENT")
-public class DeliveryAgent {
+public class DeliveryAgentDomain {
 
     @Id
     @ToString.Exclude

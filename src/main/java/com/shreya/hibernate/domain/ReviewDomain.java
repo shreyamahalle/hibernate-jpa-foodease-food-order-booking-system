@@ -9,8 +9,9 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "REVIEW")
-public class Review {
+@Entity
+@Table(name = "REVIEW")
+public class ReviewDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +24,13 @@ public class Review {
     @Column(name = "comment")
     private String comment;
 
-    @Column(name = "review_date")
     @Temporal(TemporalType.DATE)
+    @Column(name = "review_date")
     private Date reviewDate;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
-    private Restaurant restaurant;
+    private RestaurantDomain restaurant;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)

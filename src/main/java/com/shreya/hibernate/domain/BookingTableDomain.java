@@ -4,9 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-
 import java.time.LocalDateTime;
 
 @Data
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 public class BookingTableDomain {
 
     @Id
-    @ToString.Exclude
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
@@ -37,5 +35,4 @@ public class BookingTableDomain {
 
     @Column(name = "status")
     private String status;
-
 }

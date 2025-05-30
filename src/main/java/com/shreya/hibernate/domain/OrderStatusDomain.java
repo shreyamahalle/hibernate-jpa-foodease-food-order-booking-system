@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "ORDERSTATUS")
-public class OrderStatus {
+public class OrderStatusDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

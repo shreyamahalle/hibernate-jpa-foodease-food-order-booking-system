@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DeliveryAgentService {
 
-    boolean addDeliveryAgent(DeliveryAgent deliveryAgent) throws SQLException;
+    DeliveryAgent addDeliveryAgent(DeliveryAgent deliveryAgent) throws SQLException;
 
     boolean updateDeliveryAgent(DeliveryAgent deliveryAgent) throws SQLException;
 

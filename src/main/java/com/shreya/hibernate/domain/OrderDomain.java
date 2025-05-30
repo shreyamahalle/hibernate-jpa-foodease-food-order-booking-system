@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "ORDERR") // "ORDER" is a reserved keyword in many DBs (use ORDERR or ORDER_TABLE)
-public class Order {
+public class OrderDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "NOTIFICATION")
-public class Notification {
+public class NotificationDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

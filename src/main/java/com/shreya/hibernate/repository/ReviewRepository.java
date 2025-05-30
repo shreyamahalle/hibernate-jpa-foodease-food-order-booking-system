@@ -1,9 +1,9 @@
 package com.shreya.hibernate.repository;
 
-import com.shreya.hibernate.domain.Review;
+import com.shreya.hibernate.domain.ReviewDomain;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ReviewRepository extends JpaRepository<Review,Integer> {
+public interface ReviewRepository extends JpaRepository<ReviewDomain,Integer> {
 
 
 }

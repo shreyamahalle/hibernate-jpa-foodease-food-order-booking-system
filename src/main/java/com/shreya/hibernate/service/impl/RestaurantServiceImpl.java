@@ -1,59 +1,84 @@
 package com.shreya.hibernate.service.impl;
 
+import com.shreya.hibernate.domain.RestaurantDomain;
 import com.shreya.hibernate.exception.RestaurantDeleteException;
 import com.shreya.hibernate.exception.RestaurantNotFoundException;
 import com.shreya.hibernate.exception.RestaurantUpdateException;
 import com.shreya.hibernate.model.Restaurant;
 import com.shreya.hibernate.repository.RestaurantRepository;
 import com.shreya.hibernate.service.RestaurantService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
-
-    private final Logger log = LoggerFactory.getLogger(RestaurantServiceImpl.class);
 
     @Autowired
     private RestaurantRepository restaurantRepository;
 
     @Override
-    public void insertRestaurant(Restaurant restaurant) throws SQLException {
-        restaurantRepository.addRestaurant(restaurant);
+    public void insertRestaurant(Restaurant restaurant) {
+        log.info("Insert Restaurant: {}", restaurant);
+        restaurantRepository.save(toDomain(restaurant));
     }
 
     @Override
     public List<Restaurant> retrieveRestaurants() {
-        return restaurantRepository.retrieveRestaurants();
+        log.info("Retrieve all restaurants");
+        return restaurantRepository.findAll()
+                .stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Restaurant getRestaurantById(int id) {
-        Restaurant restaurant = restaurantRepository.retrieveRestaurant(id);
-        if (restaurant == null) {
-            throw new RestaurantNotFoundException("Restaurant not found with ID: " + id);
-        }
-        return restaurant;
+        log.info("Get restaurant by ID: {}", id);
+        RestaurantDomain domain = restaurantRepository.findById(id)
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant not found with ID: " + id));
+        return toModel(domain);
     }
 
     @Override
-    public boolean deleteRestaurant(int id) throws SQLException {
-        if (!restaurantRepository.deleteRestaurant(id)) {
+    public boolean deleteRestaurant(int id) {
+        log.info("Delete restaurant ID: {}", id);
+        if (!restaurantRepository.existsById(id)) {
             throw new RestaurantDeleteException("Failed to delete restaurant with ID: " + id);
         }
+        restaurantRepository.deleteById(id);
         return true;
     }
 
     @Override
-    public boolean updateRestaurant(int id) throws SQLException {
-        if (!restaurantRepository.updateRestaurant(id)) {
-            throw new RestaurantUpdateException("Failed to update restaurant with ID: " + id);
-        }
+    public boolean updateRestaurant(int id) {
+        log.info("Update restaurant ID: {}", id);
+        RestaurantDomain domain = restaurantRepository.findById(id)
+                .orElseThrow(() -> new RestaurantUpdateException("Cannot update. Restaurant not found with ID: " + id));
+        restaurantRepository.save(domain); // re-save after making changes
         return true;
+    }
+
+    // === Mapping Methods ===
+    private Restaurant toModel(RestaurantDomain domain) {
+        return Restaurant.builder()
+                .id(domain.getId())
+                .name(domain.getName())
+                .City(domain.getCity())
+                .Area(domain.getArea())
+                .build();
+    }
+
+    private RestaurantDomain toDomain(Restaurant model) {
+        return RestaurantDomain.builder()
+                .id(model.getId())
+                .name(model.getName())
+                .city(model.getCity())
+                .area(model.getArea())
+                .build();
     }
 }

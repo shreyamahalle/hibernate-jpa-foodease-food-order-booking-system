@@ -9,8 +9,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "RESTAURANT")
-public class Restaurant {
+@Entity
+@Table(name = "RESTAURANT")
+public class RestaurantDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,5 +28,5 @@ public class Restaurant {
     private String area;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
+    private List<ReviewDomain> reviews; // Correct class name for reviews
 }

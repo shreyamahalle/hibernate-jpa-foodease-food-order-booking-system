@@ -29,7 +29,6 @@ public class CustomerServiceImpl implements CustomerService {
             customerRepository.save(domain);
             log.info("Customer added successfully{}", customer);
         } catch (Exception e) {
-            log.error("Error saving customer: {}", customer, e);
             throw new CustomerServiceException("Failed to add customer");
         }
         //return customerRepository.save(domain);

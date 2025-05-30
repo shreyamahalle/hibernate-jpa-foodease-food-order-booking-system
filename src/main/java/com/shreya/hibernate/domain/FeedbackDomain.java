@@ -2,14 +2,13 @@ package com.shreya.hibernate.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "FEEDBACK")
-public class Feedback {
+public class FeedbackDomain {
 
     @Id
     @ToString.Exclude
@@ -21,9 +20,9 @@ public class Feedback {
     @JoinColumn(name = "CUSTOMER_ID", nullable = false)
     private CustomerDomain customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORDER_ID", nullable = false)
-    private Order order;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "ORDER_ID", nullable = false)
+//    private Order order;
 
     @Column(name = "RATING", nullable = false)
     private int rating;

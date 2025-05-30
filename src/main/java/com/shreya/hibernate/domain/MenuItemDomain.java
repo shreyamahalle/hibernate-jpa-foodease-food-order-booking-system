@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "MENUITEM")
-public class MenuItem {
+public class MenuItemDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

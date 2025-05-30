@@ -28,8 +28,8 @@ public class CartItemController {
     @PostMapping("/cartItem")
     public ResponseEntity<String> addCartItem(@RequestBody CartItem cartItem) throws SQLException {
         log.info("API called: add cartItem {}", cartItem);
-        boolean added = cartItemService.addCartItem(cartItem);
-        if (!added) {
+        Object added = cartItemService.addCartItem(cartItem);
+        if (!(boolean) added) {
             throw new CartItemAddFailedException("Failed to add CartItem.");
         } else {
             return ResponseEntity.status(HttpStatus.CREATED).body("CartItem added successfully.");

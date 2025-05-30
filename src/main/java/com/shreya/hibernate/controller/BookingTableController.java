@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tableBookingManagement")
@@ -69,11 +70,10 @@ public class BookingTableController {
     @DeleteMapping("/table/{id}")
     public ResponseEntity<String> deleteBooking(@PathVariable Long id) {
         log.info("Deleting booking with ID: {}", id);
-        boolean deleted = bookingTableService.deleteBooking(id);
-        if (deleted) {
+        Optional<BookingTable> deleted = bookingTableService.deleteBooking(id);
+        if (!deleteBooking(id).hasBody()) throw new IdNotFoundException("Booking not found with id: " + id);
+        else {
             return ResponseEntity.ok("Booking deleted successfully.");
-        } else {
-            throw new IdNotFoundException("Booking not found with id: " + id);
         }
 
     }

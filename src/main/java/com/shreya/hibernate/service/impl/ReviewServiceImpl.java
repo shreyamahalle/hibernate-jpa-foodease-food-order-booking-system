@@ -1,71 +1,91 @@
 package com.shreya.hibernate.service.impl;
 
-import com.shreya.hibernate.exception.ReviewAlreadyExistsException;
-import com.shreya.hibernate.exception.ReviewDeleteException;
-import com.shreya.hibernate.exception.ReviewNotFoundException;
-import com.shreya.hibernate.exception.ReviewUpdateException;
+import com.shreya.hibernate.domain.ReviewDomain;
+import com.shreya.hibernate.exception.*;
 import com.shreya.hibernate.model.Review;
 import com.shreya.hibernate.repository.ReviewRepository;
 import com.shreya.hibernate.service.ReviewService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ReviewServiceImpl implements ReviewService {
-
-    private final Logger log = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
     @Autowired
     private ReviewRepository reviewRepository;
 
     @Override
-    public boolean addReview(Review review) throws SQLException {
-        log.info("Adding review {}", review);
-        boolean added = reviewRepository.addReview(review);
-        if (!added) {
-            throw new ReviewAlreadyExistsException("Review already exists or failed to add.");
-        }
+    public boolean addReview(Review review) {
+        log.info("Adding review: {}", review);
+        ReviewDomain domain = toDomain(review);
+        reviewRepository.save(domain);
         return true;
     }
 
     @Override
-    public List<Review> getAllReviews() throws SQLException {
+    public List<Review> getAllReviews() {
         log.info("Fetching all reviews");
-        return reviewRepository.retrieveReviews();
+        return reviewRepository.findAll()
+                .stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Review getReviewById(Long id) {
-        log.info("Getting Review By ID: {}", id);
-        Review review = reviewRepository.findById(id);
-        if (review == null) {
-            throw new ReviewNotFoundException("Review not found with ID: " + id);
-        }
-        return review;
+        log.info("Getting review by ID: {}", id);
+        ReviewDomain domain = reviewRepository.findById(Math.toIntExact(id))
+                .orElseThrow(() -> new ReviewNotFoundException("Review not found with ID: " + id));
+        return toModel(domain);
     }
 
     @Override
     public boolean updateReview(Review review) {
-        log.info("Updating Review: {}", review);
-        boolean updated = reviewRepository.updateReview(review);
-        if (!updated) {
-            throw new ReviewUpdateException("Failed to update review with ID: " + review.getId());
-        }
+        log.info("Updating review: {}", review);
+        ReviewDomain domain = reviewRepository.findById(Math.toIntExact(review.getId()))
+                .orElseThrow(() -> new ReviewUpdateException("Review not found with ID: " + review.getId()));
+        domain.setRating(review.getRating());
+        domain.setComment(review.getComment());
+        domain.setReviewDate(review.getReviewDate());
+        reviewRepository.save(domain);
         return true;
     }
 
     @Override
     public boolean deleteReview(Long id) {
-        log.info("Deleting Review ID: {}", id);
-        boolean deleted = reviewRepository.deleteReview(id);
-        if (!deleted) {
-            throw new ReviewDeleteException("Failed to delete review with ID: " + id);
+        log.info("Deleting review ID: {}", id);
+        if (!reviewRepository.existsById(Math.toIntExact(id))) {
+            throw new ReviewDeleteException("Review not found with ID: " + id);
         }
+        reviewRepository.deleteById(Math.toIntExact(id));
         return true;
+    }
+
+    // === Mapping Methods ===
+    private ReviewDomain toDomain(Review review) {
+        return ReviewDomain.builder()
+                .id(review.getId())
+                .rating(review.getRating())
+                .comment(review.getComment())
+                .reviewDate(review.getReviewDate())
+                //.restaurant(review.getRestaurant()) // must map to domain
+                //.customer(review.getCustomer())     // must map to domain
+                .build();
+    }
+
+    private Review toModel(ReviewDomain domain) {
+        return Review.builder()
+                .id(domain.getId())
+                .rating(domain.getRating())
+                .comment(domain.getComment())
+                .reviewDate(domain.getReviewDate())
+//                .restaurant(domain.getRestaurant()) // map back if needed
+//                .customer(domain.getCustomer())     // map back if needed
+                .build();
     }
 }

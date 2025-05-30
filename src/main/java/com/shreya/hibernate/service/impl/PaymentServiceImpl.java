@@ -1,69 +1,91 @@
 package com.shreya.hibernate.service.impl;
 
+import com.shreya.hibernate.domain.PaymentDomain;
 import com.shreya.hibernate.exception.PaymentAlreadyExistsException;
 import com.shreya.hibernate.exception.PaymentNotFoundException;
 import com.shreya.hibernate.model.Payment;
 import com.shreya.hibernate.repository.PaymentRepository;
 import com.shreya.hibernate.service.PaymentService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class PaymentServiceImpl implements PaymentService {
-
-    private final Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
     @Autowired
     private PaymentRepository paymentRepository;
 
     @Override
-    public boolean addPayment(Payment payment) throws SQLException {
+    public boolean addPayment(Payment payment) {
         log.info("Add Payment: {}", payment);
-        boolean exists = paymentRepository.findById(payment.getId().intValue()) != null;
-        if (exists) {
+        if (paymentRepository.existsById(Math.toIntExact(payment.getId()))) {
             throw new PaymentAlreadyExistsException("Payment already exists with ID: " + payment.getId());
         }
-        return paymentRepository.addPayment(payment);
+        paymentRepository.save(toDomain(payment));
+        return true;
     }
 
     @Override
-    public List<Payment> getAllPayments() throws SQLException {
+    public List<Payment> getAllPayments() {
         log.info("Get All Payments");
-        return paymentRepository.findAll();
+        return paymentRepository.findAll().stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Payment getPaymentById(int id) throws SQLException {
+    public Payment getPaymentById(int id) {
         log.info("Get Payment By ID: {}", id);
-        Payment payment = paymentRepository.findById(id);
-        if (payment == null) {
-            throw new PaymentNotFoundException("Payment not found with ID: " + id);
-        }
-        return payment;
+        PaymentDomain domain = paymentRepository.findById((int) id)
+                .orElseThrow(() -> new PaymentNotFoundException("Payment not found with ID: " + id));
+        return toModel(domain);
     }
 
     @Override
-    public boolean updatePayment(Payment payment) throws SQLException {
+    public boolean updatePayment(Payment payment) {
         log.info("Update Payment: {}", payment);
-        boolean updated = paymentRepository.update(payment);
-        if (!updated) {
+        if (!paymentRepository.existsById(Math.toIntExact(payment.getId()))) {
             throw new PaymentNotFoundException("Cannot update. Payment not found with ID: " + payment.getId());
         }
+        paymentRepository.save(toDomain(payment));
         return true;
     }
 
     @Override
-    public boolean deletePayment(int id) throws SQLException {
+    public boolean deletePayment(int id) {
         log.info("Delete Payment ID: {}", id);
-        boolean deleted = paymentRepository.delete(id);
-        if (!deleted) {
+        if (!paymentRepository.existsById((int) id)) {
             throw new PaymentNotFoundException("Cannot delete. Payment not found with ID: " + id);
         }
+        paymentRepository.deleteById((int) id);
         return true;
+    }
+
+    // === Mapping Methods ===
+    private Payment toModel(PaymentDomain domain) {
+        return Payment.builder()
+                .id(domain.getId())
+                .amount(domain.getAmount())
+                .paymentMethod(domain.getPaymentMethod())
+                .paymentStatus(domain.getPaymentStatus())
+                .transactionId(domain.getTransactionId())
+                //.order(domain.getOrder().getId()) // assuming order ID is needed
+                .build();
+    }
+
+    private PaymentDomain toDomain(Payment model) {
+        return PaymentDomain.builder()
+                .id(model.getId())
+                .amount(model.getAmount())
+                .paymentMethod(model.getPaymentMethod())
+                .paymentStatus(model.getPaymentStatus())
+                .transactionId(model.getTransactionId())
+                //.order(OrderDomain.builder().id(model.getOrderId()).build()) // minimal object with only ID
+                .build();
     }
 }

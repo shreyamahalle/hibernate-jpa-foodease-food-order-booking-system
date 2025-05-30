@@ -1,65 +1,79 @@
 package com.shreya.hibernate.service.impl;
 
-import com.shreya.hibernate.exception.DatabaseException;
+import com.shreya.hibernate.domain.OrderStatusDomain;
 import com.shreya.hibernate.exception.OrderStatusNotFoundException;
 import com.shreya.hibernate.model.OrderStatus;
 import com.shreya.hibernate.repository.OrderStatusRepository;
 import com.shreya.hibernate.service.OrderStatusService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class OrderStatusServiceImpl implements OrderStatusService {
-
-    private final Logger log = LoggerFactory.getLogger(OrderStatusServiceImpl.class);
 
     @Autowired
     private OrderStatusRepository orderStatusRepository;
 
     @Override
     public boolean addOrderStatus(OrderStatus orderStatus) {
-        log.info("Adding Order Status: {}", orderStatus);
-        return orderStatusRepository.addOrderStatus(orderStatus);
+        log.info("Saving Order Status: {}", orderStatus);
+        orderStatusRepository.save(toDomain(orderStatus));
+        return true;
     }
 
     @Override
     public List<OrderStatus> getAllOrderStatus() {
-        log.info("Fetching all Order Statuses");
-        return orderStatusRepository.retrieveOrderStatuses();
+        log.info("Fetching all order statuses");
+        return orderStatusRepository.findAll().stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
     }
 
     @Override
     public OrderStatus getOrderStatusById(Long id) {
-        log.info("Fetching Order Status by ID: {}", id);
-        OrderStatus status = orderStatusRepository.retrieveOrderStatus(id);
-        if (status == null) {
-            throw new OrderStatusNotFoundException("OrderStatus with ID " + id + " not found");
-        }
-        return status;
+        log.info("Fetching order status by ID: {}", id);
+        OrderStatusDomain domain = orderStatusRepository.findById(Math.toIntExact(id))
+                .orElseThrow(() -> new OrderStatusNotFoundException("OrderStatus with ID " + id + " not found"));
+        return toModel(domain);
     }
 
     @Override
     public boolean updateOrderStatus(OrderStatus orderStatus) {
-        log.info("Updating Order Status: {}", orderStatus);
-        boolean updated = orderStatusRepository.updateOrderStatus(orderStatus);
-        if (!updated) {
+        if (!orderStatusRepository.existsById((int) orderStatus.getId())) {
             throw new OrderStatusNotFoundException("OrderStatus with ID " + orderStatus.getId() + " not found");
         }
+        orderStatusRepository.save(toDomain(orderStatus));
         return true;
     }
 
     @Override
     public boolean deleteOrderStatus(Long id) {
-        log.info("Deleting Order Status with ID: {}", id);
-        boolean deleted = orderStatusRepository.deleteOrderStatus(id);
-        if (!deleted) {
+        if (!orderStatusRepository.existsById(Math.toIntExact(id))) {
             throw new OrderStatusNotFoundException("OrderStatus with ID " + id + " not found");
         }
+        orderStatusRepository.deleteById(Math.toIntExact(id));
         return true;
+    }
+
+    // === Mapping Methods ===
+    private OrderStatus toModel(OrderStatusDomain domain) {
+        return OrderStatus.builder()
+                .id(domain.getId())
+                .status(domain.getStatus())
+                .description(domain.getDescription())
+                .build();
+    }
+
+    private OrderStatusDomain toDomain(OrderStatus model) {
+        return OrderStatusDomain.builder()
+                .id(model.getId())
+                .status(model.getStatus())
+                .description(model.getDescription())
+                .build();
     }
 }

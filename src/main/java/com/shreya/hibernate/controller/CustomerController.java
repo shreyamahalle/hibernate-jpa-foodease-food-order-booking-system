@@ -82,9 +82,10 @@ public class CustomerController {
     public ResponseEntity<String> deleteCustomer(@PathVariable int id) {
         try {
             log.info("Received request to delete customer with id: {}", id);
-            boolean deleted = customerService.deleteCustomer(id);
-            ResponseEntity<String> stringResponseEntity = !deleted ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found") : ResponseEntity.ok("Customer deleted successfully");
-            return stringResponseEntity;
+            Customer deleted = customerService.deleteCustomer(id);
+            return deleted != null
+                    ? ResponseEntity.ok("Customer deleted successfully")
+                    : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
         } catch (Exception e) {
             log.error("Error deleting customer", e);
             throw new CustomerServiceException("Failed to delete customer");

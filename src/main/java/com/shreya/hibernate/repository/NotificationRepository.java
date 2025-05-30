@@ -1,9 +1,11 @@
 package com.shreya.hibernate.repository;
 
 
-import com.shreya.hibernate.domain.Notification;
+import com.shreya.hibernate.domain.NotificationDomain;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NotificationRepository extends JpaRepository<Notification,Integer> {
+import java.util.List;
 
+public interface NotificationRepository extends JpaRepository<NotificationDomain,Integer> {
+    List<NotificationDomain> findByCustomerId(Long customerId);
 }
