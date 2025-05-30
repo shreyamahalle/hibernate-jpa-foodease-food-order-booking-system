@@ -29,11 +29,11 @@ public class CustomerController {
     public ResponseEntity<String> addCustomer(@RequestBody Customer customer) {
         try {
             log.info("Received request to add customer: {}", customer);
-            String message = customerService.addCustomer(customer);
+            String message = String.valueOf(customerService.addCustomer(customer));
             return ResponseEntity.status(HttpStatus.CREATED).body(message);
         } catch (Exception e) {
             log.error("Error while adding customer", e);
-            throw new CustomerServiceException("Failed to add customer", e);
+            throw new CustomerServiceException("Failed to add customer");
         }
     }
 
@@ -45,7 +45,7 @@ public class CustomerController {
             return ResponseEntity.ok(customers);
         } catch (Exception e) {
             log.error("Error fetching customers", e);
-            throw new CustomerServiceException("Unable to fetch customers", e);
+            throw new CustomerServiceException("Unable to fetch customers");
         }
     }
 
@@ -60,7 +60,7 @@ public class CustomerController {
             throw e;
         } catch (Exception e) {
             log.error("Error fetching customer by id", e);
-            throw new CustomerServiceException("Failed to fetch customer", e);
+            throw new CustomerServiceException("Failed to fetch customer");
         }
     }
 
@@ -74,7 +74,7 @@ public class CustomerController {
                     : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
         } catch (Exception e) {
             log.error("Error updating customer", e);
-            throw new CustomerServiceException("Failed to update customer", e);
+            throw new CustomerServiceException("Failed to update customer");
         }
     }
 
@@ -83,25 +83,11 @@ public class CustomerController {
         try {
             log.info("Received request to delete customer with id: {}", id);
             boolean deleted = customerService.deleteCustomer(id);
-            return deleted ? ResponseEntity.ok("Customer deleted successfully")
-                    : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
+            ResponseEntity<String> stringResponseEntity = !deleted ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found") : ResponseEntity.ok("Customer deleted successfully");
+            return stringResponseEntity;
         } catch (Exception e) {
             log.error("Error deleting customer", e);
-            throw new CustomerServiceException("Failed to delete customer", e);
-        }
-    }
-
-    @PatchMapping("/customer/{id}")
-    public ResponseEntity<String> updatePartialCustomer(@PathVariable int id, @RequestBody Customer customer) {
-        try {
-            log.info("Received request for partial update of customer with id: {}", id);
-            customer.setId(id);
-            boolean updated = customerService.updatePartialCustomer(customer);
-            return updated ? ResponseEntity.ok("Customer partially updated")
-                    : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
-        } catch (Exception e) {
-            log.error("Error in partial update", e);
-            throw new CustomerServiceException("Failed to update customer partially", e);
+            throw new CustomerServiceException("Failed to delete customer");
         }
     }
 }

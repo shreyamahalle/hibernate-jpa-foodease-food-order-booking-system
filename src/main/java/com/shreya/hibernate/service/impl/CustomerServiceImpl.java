@@ -1,5 +1,6 @@
 package com.shreya.hibernate.service.impl;
 
+import com.shreya.hibernate.domain.CustomerDomain;
 import com.shreya.hibernate.exception.CustomerNotFoundException;
 import com.shreya.hibernate.exception.CustomerServiceException;
 import com.shreya.hibernate.model.Customer;
@@ -21,87 +22,96 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public String addCustomer(Customer customer) {
+    public Customer addCustomer(Customer customer) {
         log.info("Saving Customer {}", customer);
+        CustomerDomain domain = this.populateDomain(customer);
         try {
-            customerRepository.addCustomer(customer);
-            return "Customer added successfully.";
+            customerRepository.save(domain);
+            log.info("Customer added successfully{}", customer);
         } catch (Exception e) {
             log.error("Error saving customer: {}", customer, e);
-            throw new CustomerServiceException("Failed to add customer", e);
+            throw new CustomerServiceException("Failed to add customer");
         }
+        //return customerRepository.save(domain);
+        return this.populateModel(customerRepository.save(domain));
     }
 
     @Override
-    public boolean deleteCustomer(int id) {
+    public Customer deleteCustomer(int id) {
         log.info("Deleting Customer with ID {}", id);
-        try {
-            boolean deleted = customerRepository.deleteCustomer(id);
-            if (!deleted) {
-                throw new CustomerNotFoundException("Customer not found with ID: " + id);
-            }
-            return true;
-        } catch (Exception e) {
-            log.error("Error deleting customer with ID {}", id, e);
-            throw new CustomerServiceException("Failed to delete customer", e);
+        Optional<CustomerDomain> domain = customerRepository.findById(id);
+
+        if (!domain.isEmpty()) {
+            customerRepository.deleteById(id);
+        } else {
+            log.error("Error deleting customer with ID {}", id);
+            throw new CustomerServiceException("Failed to delete customer");
         }
+        return this.populateModel(domain.get());
     }
 
     @Override
     public boolean updateCustomer(Customer customer) {
         log.info("Updating Customer {}", customer);
         try {
-            boolean updated = customerRepository.updateCustomer(customer);
-            if (!updated) {
+            if (updateCustomer(customer)) {
                 throw new CustomerNotFoundException("Customer not found with ID: " + customer.getId());
             }
             return true;
         } catch (Exception e) {
             log.error("Error updating customer: {}", customer, e);
-            throw new CustomerServiceException("Failed to update customer", e);
+            throw new CustomerServiceException("Failed to update customer"); // Preserve original exception
         }
     }
+
 
     @Override
     public List<Customer> retrieveCustomers() {
-        log.info("Retrieving all customers");
-        try {
-            return customerRepository.retrieveCustomers();
-        } catch (Exception e) {
-            log.error("Error retrieving customers", e);
-            throw new CustomerServiceException("Failed to retrieve customers", e);
+        List<Customer> customers = customerRepository.findAll().stream().map(this::populateModel).toList();
+
+        if (!customers.isEmpty()) {
+            log.info("Retrieved {} customers", customers.size());
+            return customers;
+        } else {
+            log.error("No customers found");
+            throw new CustomerServiceException("No customers available");
         }
     }
+
 
     @Override
     public Optional<Customer> getCustomerById(int id) {
-        Optional<Customer> result;
+        Optional<CustomerDomain> customer = customerRepository.findById(id);
         log.info("Fetching customer by ID: {}", id);
         try {
-            Optional<Customer> customer = customerRepository.findById(id);
-            if (customer == null) {
+            if (customer.isEmpty()) {
                 throw new CustomerNotFoundException("Customer not found with ID: " + id);
             }
-            result = customer;
         } catch (Exception e) {
             log.error("Error fetching customer with ID {}", id, e);
-            throw new CustomerServiceException("Failed to fetch customer", e);
+            throw new CustomerServiceException("Failed to fetch customer");
         }
-        return result;
+        return Optional.ofNullable(this.populateModel(customer.get()));
     }
 
-    @Override
-    public boolean updatePartialCustomer(Customer customer) {
-        log.info("Partially updating Customer: {}", customer);
-        try {
-            boolean updated = customerRepository.updatePartialCustomer(customer);
-            if (!updated) {
-                throw new CustomerNotFoundException("Customer not found with ID: " + customer.getId());
-            }
-            return true;
-        } catch (Exception e) {
-            log.error("Error in partial update for customer: {}", customer, e);
-            throw new CustomerServiceException("Failed to partially update customer", e);
-        }
+    private Customer populateModel(CustomerDomain domain) {
+        return Customer.builder()
+                .id(domain.getId())
+                .name(domain.getName())
+                .age(domain.getAge())
+                .city(domain.getCity())
+                .mobileNo(Math.toIntExact(domain.getMobileNo()))
+                .build();
+    }
+
+    private CustomerDomain populateDomain(Customer model) {
+        return CustomerDomain.builder()
+                .id(model.getId())
+                .name(model.getName())
+                .city(model.getCity())
+                .mobileNo(model.getMobileNo())
+                .age(model.getAge())
+                .build();
+
     }
 }

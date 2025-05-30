@@ -9,16 +9,14 @@ import java.util.Optional;
 
 public interface CustomerService {
 
-    String addCustomer(Customer customer) throws SQLException;
+    Customer addCustomer(Customer customer) throws SQLException;
 
-    boolean deleteCustomer(int id) throws SQLException;
+    Customer deleteCustomer(int id) throws SQLException;
 
     boolean updateCustomer(Customer customer) throws SQLException;
 
     List<Customer> retrieveCustomers();
 
     Optional<Customer> getCustomerById(int id) throws CustomerNotFoundException;
-
-    boolean updatePartialCustomer(Customer customer) throws SQLException;
 
 }
