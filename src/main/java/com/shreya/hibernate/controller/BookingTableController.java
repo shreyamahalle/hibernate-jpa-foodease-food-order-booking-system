@@ -75,6 +75,5 @@ public class BookingTableController {
         else {
             return ResponseEntity.ok("Booking deleted successfully.");
         }
-
     }
 }
