@@ -55,7 +55,6 @@ public class BookingTableController {
         }
         return ResponseEntity.ok(booking);
     }
-
     @PutMapping("/table/{id}")
     public ResponseEntity<String> updateBooking(@PathVariable Long id, @RequestBody BookingTable bookingTable) {
         log.info("Updating booking with ID: {}. Data: {}", id, bookingTable);
