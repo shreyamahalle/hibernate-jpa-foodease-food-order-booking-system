@@ -73,8 +73,7 @@ public class BookingTableController {
         log.info("Deleting booking with ID: {}", id);
         Optional<BookingTable> deleted = bookingTableService.deleteBooking(id);
         if (!deleteBooking(id).hasBody()) throw new IdNotFoundException("Booking not found with id: " + id);
-        else
-        {
+        else {
             return ResponseEntity.ok("Booking deleted successfully.");
         }
     }

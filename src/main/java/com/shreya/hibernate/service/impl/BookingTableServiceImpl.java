@@ -38,8 +38,8 @@ public class BookingTableServiceImpl implements BookingTableService {
     @Override
     public BookingTable getBookingById(Long id) {
         Optional<BookingTableDomain> getBookingById = bookingTableRepository.findById(id);
-        if(getBookingById.isEmpty()){
-            throw  new BookingNotFoundException("Booking not found");
+        if (getBookingById.isEmpty()) {
+            throw new BookingNotFoundException("Booking not found");
         }
         return this.populateModel(getBookingById.get());
     }
@@ -47,11 +47,11 @@ public class BookingTableServiceImpl implements BookingTableService {
     @Override
     public Optional<BookingTable> deleteBooking(Long id) {
         Optional<BookingTableDomain> domain = bookingTableRepository.findById(id);
-        if (! domain.isEmpty()){
+        if (!domain.isEmpty()) {
             bookingTableRepository.deleteById(id);
             System.out.println("deleted booking" + domain.get());
-        }else{
-            throw  new BookingNotFoundException("Booking not found");
+        } else {
+            throw new BookingNotFoundException("Booking not found");
         }
         return Optional.ofNullable(this.populateModel(domain.get()));
     }
@@ -78,7 +78,7 @@ public class BookingTableServiceImpl implements BookingTableService {
     }
 
 
-    private BookingTable populateModel(BookingTableDomain domain){
+    private BookingTable populateModel(BookingTableDomain domain) {
         return BookingTable.builder()
                 .id(domain.getId())
                 .customerName(domain.getCustomerName())
@@ -87,7 +87,8 @@ public class BookingTableServiceImpl implements BookingTableService {
                 .bookingTime(domain.getBookingTime())
                 .status(domain.getStatus()).build();
     }
-    private BookingTableDomain populateDomain(BookingTable model){
+
+    private BookingTableDomain populateDomain(BookingTable model) {
         return BookingTableDomain.builder()
                 .id(model.getId())
                 .customerName(model.getCustomerName())

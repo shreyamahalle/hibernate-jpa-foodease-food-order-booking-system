@@ -52,10 +52,10 @@ public class NotificationServiceImpl implements NotificationService {
             NotificationDomain domain = optional.get();
             domain.setRead(true);
             notificationRepository.save(domain);
-        }else{
-                throw new NotificationNotFoundException("Notification not found");
-            }
-            return true;
+        } else {
+            throw new NotificationNotFoundException("Notification not found");
+        }
+        return true;
     }
 
     // === Mapping Methods ===
