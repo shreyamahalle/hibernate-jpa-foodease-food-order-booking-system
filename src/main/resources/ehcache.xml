@@ -1,0 +1,12 @@
+<config xmlns="http://www.ehcache.org/v3">
+    <cache alias="productCache">
+        <key-type>java.lang.Long</key-type>
+        <value-type>com.example.model.Product</value-type>
+        <expiry>
+            <ttl unit="minutes">30</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1000</heap>
+        </resources>
+    </cache>
+</config>
