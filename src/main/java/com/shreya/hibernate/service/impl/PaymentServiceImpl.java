@@ -41,7 +41,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment getPaymentById(int id) {
         log.info("Get Payment By ID: {}", id);
-        PaymentDomain domain = paymentRepository.findById((int) id)
+        PaymentDomain domain = paymentRepository.findById(id)
                 .orElseThrow(() -> new PaymentNotFoundException("Payment not found with ID: " + id));
         return toModel(domain);
     }
@@ -59,10 +59,10 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public boolean deletePayment(int id) {
         log.info("Delete Payment ID: {}", id);
-        if (!paymentRepository.existsById((int) id)) {
+        if (!paymentRepository.existsById(id)) {
             throw new PaymentNotFoundException("Cannot delete. Payment not found with ID: " + id);
         }
-        paymentRepository.deleteById((int) id);
+        paymentRepository.deleteById(id);
         return true;
     }
 

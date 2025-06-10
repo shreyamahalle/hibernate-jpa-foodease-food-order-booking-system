@@ -56,11 +56,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean deleteOrder(int id) {
-        Optional<OrderDomain> existing = orderRepository.findById((int) id);
+        Optional<OrderDomain> existing = orderRepository.findById(id);
         if (existing.isEmpty()) {
             throw new OrderNotFoundException("Order not found with ID: " + id);
         }
-        orderRepository.deleteById((int) id);
+        orderRepository.deleteById(id);
         return true;
     }
 
