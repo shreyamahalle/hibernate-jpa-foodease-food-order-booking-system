@@ -31,5 +31,5 @@ public class RestaurantDomain {
     private String area;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReviewDomain> reviews; // Correct class name for reviews
+    private List<ReviewDomain> reviews;
 }

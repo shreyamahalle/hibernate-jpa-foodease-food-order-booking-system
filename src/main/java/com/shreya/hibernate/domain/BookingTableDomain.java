@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity(name = "BOOKINGTABLE")
+@Entity
+@Table(name = "BOOKINGTABLE")
 public class BookingTableDomain {
 
     @Id
