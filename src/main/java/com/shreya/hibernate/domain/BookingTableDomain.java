@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @Table(name = "BOOKINGTABLE")
+
 public class BookingTableDomain {
 
     @Id
