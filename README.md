@@ -1,4 +1,4 @@
-p[![Twitter](https://img.shields.io/twitter/follow/shreyamahalle?style=social)](https://x.com/shreyamahalle)
+[![Twitter](https://img.shields.io/twitter/follow/shreyamahalle?style=social)](https://x.com/shreyamahalle)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 ![GitHub language count](https://img.shields.io/github/languages/count/shreyamahalle/spring-boot-foodease-rest-api-filter-interceptor)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/shreyamahalle/spring-boot-foodease-rest-api-filter-interceptor)
