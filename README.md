@@ -23,7 +23,6 @@
   </tr>
 </table>
 
-
 ## Hibernate JPA Foodease Food Order Booking System
 
 ## Table of Contents

@@ -8,7 +8,6 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-
 public class CartItem {
     private Long id;
     private Long customer_id;
