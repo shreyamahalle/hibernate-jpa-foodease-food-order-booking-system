@@ -2,7 +2,6 @@ package com.shreya.hibernate.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

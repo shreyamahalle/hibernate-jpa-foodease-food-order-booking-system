@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Table(name = "BOOKINGTABLE")
 
 public class BookingTableDomain {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")

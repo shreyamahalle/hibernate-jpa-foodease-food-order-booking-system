@@ -46,8 +46,8 @@ public class BookingTableController {
         return new ResponseEntity<>(bookingTableService.getAllBookings(), HttpStatus.OK);
     }
 
-    @GetMapping("/table/{id}")
-    public ResponseEntity<BookingTable> getBookingById(@PathVariable Long id) {
+    @GetMapping("/table/{id}/{subId}/{ignoredSubId}")
+    public ResponseEntity<BookingTable> getBookingById(@PathVariable Long id,@PathVariable Long subId,@PathVariable Long ignoredSubId) {
         log.info("Fetching booking by ID: {}", id);
         BookingTable booking = bookingTableService.getBookingById(id);
         if (booking == null) {
